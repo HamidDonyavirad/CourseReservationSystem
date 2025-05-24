@@ -23,7 +23,7 @@ class Course (models.Model):
     
 class Reservation (models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    course = models.ForeignKey(User,on_delete=models.CASCADE) 
+    course = models.ForeignKey(Course,on_delete=models.CASCADE) 
     timestamp = models.DateTimeField(auto_now_add=True)
     
     class Meta:
