@@ -33,7 +33,7 @@ def reserve_course(request, course_id):
                 messages.success(request, 'Reservation was successful.')
             except:
                 messages.error(request,'You have already booked this course.')
-            return redirect('course_detial', course_id=courrse.id)
+            return redirect('course_detial', course_id=course.id)
     else:
         form = ReservationForm(user = request.user, course=course)
     return render(request, 'courses/reserve_course.html', {
