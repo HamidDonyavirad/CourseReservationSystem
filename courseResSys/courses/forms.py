@@ -3,9 +3,10 @@ from django.contrib.auth.forms import UserCreationForm
 from .models import User, Reservation, Course
 
 class UserCreationForm(UserCreationForm):
+    role = forms.ChoiceField(choices=User.ROLE_CHOISES)
     class Meta:
         model = User
-        fields = ['username','email','password1','password2'] 
+        fields = ['username','email','password1','password2', 'role'] 
 
 class CourseForm(forms.ModelForm):
     class Meta:

@@ -10,5 +10,6 @@ urlpatterns = [
     path('<int:course_id>/students/', views.course_students, name='course_students'),
     path('<int:course_id>/edit/', views.course_update, name='course_update'),
     path('<int:course_id>/delete/', views.course_delete, name='course_delete'),
+    path('register/', views.register_view, name='register'),
     
 ]

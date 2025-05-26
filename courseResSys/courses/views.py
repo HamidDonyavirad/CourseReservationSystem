@@ -2,7 +2,7 @@ from django.http import HttpResponseForbidden
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from .models import Course, Reservation
-from .forms import ReservationForm, CourseForm
+from .forms import ReservationForm, CourseForm, UserCreationForm
 from django.contrib import messages
 
 
@@ -117,4 +117,17 @@ def course_students(request, course_id):
     return render(request, 'courses/course_students.html', {
         'course': course,
         'reservations': reservations
-    })              
+    }) 
+    
+    
+#Register user and instructor
+def register_view(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Registration completed successfully.")
+            return redirect('login')
+    else:
+        form = UserCreationForm()
+    return render(request, 'register.html', {'form': form})                 
