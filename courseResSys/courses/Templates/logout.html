@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html >
+<head>
+    
+    <title>courses list</title>
+</head>
+<body>
+    <ul>
+        {% for course in courses %}
+            <li>{{course}}</li>
+        {% endfor %}
+    </ul> 
+    <a href='{% url "login" %}'> Login</a>   
+</body>
+</html>

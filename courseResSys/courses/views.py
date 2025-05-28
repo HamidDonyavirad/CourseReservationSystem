@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from .models import Course, Reservation
 from .forms import ReservationForm, CourseForm, UserCreationForm
 from django.contrib import messages
+from django.contrib.auth.views import LoginView , LogoutView
 
 
 #Show course list (Course)
@@ -130,4 +131,11 @@ def register_view(request):
             return redirect('login')
     else:
         form = UserCreationForm()
-    return render(request, 'register.html', {'form': form})                 
+    return render(request, 'register.html', {'form': form})    
+
+ #login user and instructor 
+class CustomLoginView(LoginView):
+    template_name = 'login.html' 
+
+class CustomLogoutView(LogoutView):
+    template_name = 'logout.html'              
