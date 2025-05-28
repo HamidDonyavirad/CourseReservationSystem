@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from .views import CustomLoginView, CustomLogoutView
+
 
 urlpatterns = [
     path('', views.course_list, name='course_list'),
@@ -12,6 +12,6 @@ urlpatterns = [
     path('<int:course_id>/edit/', views.course_update, name='course_update'),
     path('<int:course_id>/delete/', views.course_delete, name='course_delete'),
     path('register/', views.register_view, name='register'),
-    path('login/', CustomLoginView.as_view(), name='login'),
-    path('logout/', CustomLogoutView.as_view(next_page='login'), name='logout'),
+    path('login/', views.login_view, name='login'),
+    path('logout/',views.logout_view, name='logout'),
 ]

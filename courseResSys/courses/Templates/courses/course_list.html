@@ -15,7 +15,9 @@
     <h1>courses list</h1>
     <ul>
         {% for course in courses %}
-            <li>{{course}}</li>
+            <li><b>{{course.title}}</b> - {{course.instructor}}<br>
+                {{course.description}}
+            </li>
         {% endfor %}
     </ul>    
 </body>
