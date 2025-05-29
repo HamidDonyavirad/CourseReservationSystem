@@ -12,10 +12,10 @@
     {% else %}
         <a href='{% url "login" %}'> Login</a>
     {% endif%}
-    <h1>courses list</h1>
+    <h1><b>courses list</b></h1>
     <ul>
         {% for course in courses %}
-            <li><b>{{course.title}}</b> - {{course.instructor}}<br>
+            <li><b>  <a href= '{% url "course_detail" course.id %}'>{{course.title}} </a></b> - {{course.instructor}}<br>
                 {{course.description}}
             </li>
         {% endfor %}
