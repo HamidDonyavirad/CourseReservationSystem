@@ -18,8 +18,8 @@ class ReservationForm(forms.ModelForm):
         model= Reservation
         fields = []   #The user and course are set in the view.   
     def __init__(self, *args, **kwargs):
-        self.course = kwargs.pop('Course', None)
-        self.user = kwargs.pop('User', None)
+        self.course = kwargs.pop('course', None)
+        self.user = kwargs.pop('user', None)
         super().__init__(*args,**kwargs)  
     
     def save(self, commit = True):

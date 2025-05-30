@@ -8,7 +8,7 @@
     <h1>{{ course.title }}</h1>
         <p>{{ course.description }}</p>
         <p>{{ course.instructor }}</p>
-        <form method="post" action="{% url 'reserve_course' course.id %}">
+        <form  action="{% url 'reserve_course' course.id %}">
             {% csrf_token %}
             <button type="submit">Reserve</button>
         </form>

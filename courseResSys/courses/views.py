@@ -37,7 +37,7 @@ def reserve_course(request, course_id):
                 messages.success(request, 'Reservation was successful.')
             except:
                 messages.error(request,'You have already booked this course.')
-            return redirect('course_detail', course_id=course.id)
+            return redirect('reserve_course', course_id=course.id)
     else:
         form = ReservationForm(user = request.user, course=course)
     return render(request, 'courses/reserve_course.html', {
@@ -143,7 +143,7 @@ def login_view(request):
         if form.is_valid():
             user = form.get_user()
             login(request, user)
-            return redirect('course_list')  
+            return redirect('home')  
         else:
             messages.error(request, 'The username or password is incorrect.')
     else:
@@ -153,4 +153,4 @@ def login_view(request):
 @login_required
 def logout_view(request):
     logout(request)
-    return redirect('login')             
+    return redirect('home')             
