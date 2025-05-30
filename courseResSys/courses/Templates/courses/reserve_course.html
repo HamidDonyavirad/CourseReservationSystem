@@ -7,6 +7,12 @@
 </head>
 <body>
     <h1>Reserve Course: </h1> 
-    {{ course.title}} <br>
+    <ul>
+        {% for reservation in user_reservations %}
+        <li>{{ reservation.course.title }}</li>
+    {% empty %}
+        <li>You haven't reserved any courses yet.</li>
+    {% endfor %}
+         </ul>
 </body>
 </html>
