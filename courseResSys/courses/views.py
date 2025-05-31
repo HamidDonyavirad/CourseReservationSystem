@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from .models import Course, Reservation
 from .forms import ReservationForm, CourseForm, UserCreationForm
 from django.contrib import messages
-from django.contrib.auth import login , logout, authenticate
+from django.contrib.auth import login , logout
 from django.contrib.auth.forms import AuthenticationForm
 
 
@@ -55,80 +55,7 @@ def reserve_course(request, course_id):
 def my_reservations(request):
     reservations = Reservation.objects.filter(user=request.user).select_related('course')
     return render(request, 'courses/my_reservations.html', {'reservations': reservations})
-
-#Creating a new course only by the instructor
-@login_required
-def course_create(request):
-    if request.user.role != 'instructor':
-        return HttpResponseForbidden('You are not allowed to create courses.')
-    
-    if request.method == 'POST':
-        form = CourseForm(request.POST)
-        if form.is_valid():
-            course = form.save(commit=False)
-            course.instructor = request.user
-            course.save()
-            return redirect('course_detail', course_id=course.id)
-    else:
-        form = CourseForm()
-    
-    return render(request, 'courses/course_form.html', {'form': form})
-
-#Seeing students in a specific course
-@login_required
-def course_students(request,course_id):
-    course = get_object_or_404(course, id=course_id)
-    if course.instructor != request.user:
-        return HttpResponseForbidden('You are not authorized to view this list.')
-    students = Reservation.objects.filter(course=course).select_related('user')
-    return render(request,'courses/course_students.html', {
-        'course': course,
-        'students': students
-    })
-
-#course_update
-@login_required
-def course_update(request, course_id):
-    course = get_object_or_404(Course, id=course_id) 
-    if course.instructor != request.user:
-        return HttpResponseForbidden('You are not authorized to view this list.')
-    if request.method == 'POST':
-        form = CourseForm(request.POST, instance= course)
-        if form.is_valid():
-            form.save()
-            return redirect('course_detail', course_id = course.id)
-    else:
-        form = CourseForm(instance=course) 
-    return render(request, 'courses/course_form.html', {'form': form, 'course': course})
-
-#course_delete
-@login_required
-def course_delete(request, course_id):
-    course = get_object_or_404(Course, id=course_id)
-    if course.instructor != request.user:
-        return HttpResponseForbidden('You are not authorized to view this list.')
-    if request.method == 'POST':
-        course.delete()
-        messages.success(request, 'Course successfully deleted.')  
-        return redirect('course_list')  
-    return render(request, 'courses/course_confirm_delete.html', {'course': course}) 
-
-#Show student list
-@login_required
-def course_students(request, course_id):
-    course = get_object_or_404(Course, id=course_id)
-
-    if request.user != course.instructor:
-        return HttpResponseForbidden("You are not authorized to view this list.")
-
-    reservations = Reservation.objects.filter(course=course).select_related('user')
-
-    return render(request, 'courses/course_students.html', {
-        'course': course,
-        'reservations': reservations
-    }) 
-    
-    
+   
 #Register user and instructor
 def register_view(request):
     if request.method == 'POST':

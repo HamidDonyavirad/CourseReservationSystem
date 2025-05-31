@@ -3,12 +3,7 @@ from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
 class User (AbstractUser):
-    ROLE_CHOISES = (
-        ('student','Student'),
-        ('instructor', 'Instructor'),
-        ('admin', 'Admin'),
-    )
-    role = models.CharField(max_length=20,choices=ROLE_CHOISES) 
+    pass
     
 class Course (models.Model):
     title = models.CharField(max_length=200)  
