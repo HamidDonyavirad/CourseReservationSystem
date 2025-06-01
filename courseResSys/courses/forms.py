@@ -10,7 +10,7 @@ class UserCreationForm(UserCreationForm):
 class CourseForm(forms.ModelForm):
     class Meta:
         model= Course
-        fields = ['title', 'description', 'start_time', 'end_time', 'capacity']
+        fields = ['title', 'description', 'start_time', 'end_time', 'capacity','instructor']
 
 class ReservationForm(forms.ModelForm):
     class Meta:

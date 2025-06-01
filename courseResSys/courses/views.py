@@ -2,7 +2,7 @@ from django.http import HttpResponseForbidden
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from .models import Course, Reservation
-from .forms import ReservationForm, CourseForm, UserCreationForm
+from .forms import ReservationForm, UserCreationForm
 from django.contrib import messages
 from django.contrib.auth import login , logout
 from django.contrib.auth.forms import AuthenticationForm
@@ -15,15 +15,15 @@ def course_list (request):
 
 #Show details of each course
 def course_detail(request,course_id):
-   course = get_object_or_404(Course,id = course_id) 
-   is_reserved = False
-   if request.user.is_authenticated:
+    course = get_object_or_404(Course,id = course_id) 
+    is_reserved = False
+    if request.user.is_authenticated:
         is_reserved =Reservation.objects.filter(user=request.user, course=course).exists()
-   return render(request, 'courses/course_detail.html', {
+    return render(request, 'courses/course_detail.html', {
         'course': course,
         'is_reserved': is_reserved,
         })
-   
+      
 #Course reservation for students only
 @login_required
 def reserve_course(request, course_id):
@@ -39,6 +39,7 @@ def reserve_course(request, course_id):
             try:
                 form.save()
                 messages.success(request, 'Reservation was successful.')
+                
             except:
                 messages.error(request,'You have already booked this course.')
             return redirect('course_detail', course_id=course.id)
@@ -56,7 +57,7 @@ def my_reservations(request):
     reservations = Reservation.objects.filter(user=request.user).select_related('course')
     return render(request, 'courses/my_reservations.html', {'reservations': reservations})
    
-#Register user and instructor
+#Register user 
 def register_view(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
@@ -85,4 +86,12 @@ def login_view(request):
 @login_required
 def logout_view(request):
     logout(request)
-    return redirect('home')             
+    return redirect('home')   
+
+@login_required
+def delete_reservation(request, pk):
+    reservation = get_object_or_404(Reservation, pk=pk, user=request.user)
+    if request.method == "POST":
+        reservation.delete()
+        return redirect('my_reservations')  
+    return redirect('my_reservations')          

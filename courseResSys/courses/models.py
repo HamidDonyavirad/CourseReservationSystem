@@ -6,9 +6,9 @@ class User (AbstractUser):
     pass
     
 class Course (models.Model):
-    title = models.CharField(max_length=200)  
+    title = models.CharField(max_length=200)
+    instructor = models.CharField(max_length=200)    
     description = models.TextField()
-    instructor = models.ForeignKey (User, on_delete=models.CASCADE, limit_choices_to={'role':'instructor'})
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
     capacity = models.PositiveIntegerField()

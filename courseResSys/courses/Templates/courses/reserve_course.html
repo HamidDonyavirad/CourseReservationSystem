@@ -2,17 +2,18 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>reserve_course</title>
+    <title>Reserve Course</title>
 </head>
 <body>
-    <h1>Reserve Course: </h1> 
-    <ul>
-        {% for reservation in user_reservations %}
-        <li>{{ reservation.course.title }}</li>
-    {% empty %}
-        <li>You haven't reserved any courses yet.</li>
+
+    {% if messages %}
+    {% for message in messages %}
+        <div>
+            {{ message }}
+        </div>
     {% endfor %}
-         </ul>
+{% endif %}
+
+
 </body>
 </html>
