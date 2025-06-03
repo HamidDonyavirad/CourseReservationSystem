@@ -1,8 +1,7 @@
-from django.http import HttpResponseForbidden
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from .models import Course, Reservation
-from .forms import ReservationForm, UserCreationForm
+from .forms import  UserCreationForm
 from django.contrib import messages
 from django.contrib.auth import login , logout
 from django.contrib.auth.forms import AuthenticationForm
@@ -14,42 +13,23 @@ def course_list (request):
     return render(request,'home.html', {'courses': courses})
 
 #Show details of each course
-def course_detail(request,course_id):
-    course = get_object_or_404(Course,id = course_id) 
+def course_detail(request, course_id):
+    course = get_object_or_404(Course, id=course_id)
     is_reserved = False
+
     if request.user.is_authenticated:
-        is_reserved =Reservation.objects.filter(user=request.user, course=course).exists()
+        is_reserved = Reservation.objects.filter(user=request.user, course=course).exists()
+
+        if request.method == 'POST' and not is_reserved:
+            Reservation.objects.create(user=request.user, course=course)
+            is_reserved = True  
+            return redirect('course_detail', course_id=course.id)  
+
     return render(request, 'courses/course_detail.html', {
         'course': course,
         'is_reserved': is_reserved,
-        })
-      
-#Course reservation for students only
-@login_required
-def reserve_course(request, course_id):
-    course = get_object_or_404(Course, id=course_id)
-    user_reservations = Reservation.objects.filter(user=request.user).select_related('course')
-    
-    if request.method == 'POST':
-        if Reservation.objects.filter(user=request.user, course=course).exists():
-            messages.error(request, 'You have already booked this course.')
-            return redirect('course_detail', course_id= course.id)
-        form = ReservationForm(request.POST, user=request.user, course = course)
-        if form.is_valid():
-            try:
-                form.save()
-                messages.success(request, 'Reservation was successful.')
-                
-            except:
-                messages.error(request,'You have already booked this course.')
-            return redirect('course_detail', course_id=course.id)
-    else:
-        form = ReservationForm(user = request.user, course=course)
-    return render(request, 'courses/reserve_course.html', {
-        'form': form,
-        'course': course,
-        'user_reservations': user_reservations
     })
+
     
 #View user's booked courses
 @login_required
@@ -69,7 +49,7 @@ def register_view(request):
         form = UserCreationForm()
     return render(request, 'register.html', {'form': form})    
 
- #login user and instructor 
+#login user and instructor 
 def login_view(request):
     if request.method == 'POST':
         form = AuthenticationForm(request, data=request.POST)
@@ -86,8 +66,9 @@ def login_view(request):
 @login_required
 def logout_view(request):
     logout(request)
-    return redirect('home')   
-
+    return redirect('home') 
+  
+#delete the reserved course 
 @login_required
 def delete_reservation(request, pk):
     reservation = get_object_or_404(Reservation, pk=pk, user=request.user)
