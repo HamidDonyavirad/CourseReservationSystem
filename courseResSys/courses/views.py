@@ -5,6 +5,7 @@ from .forms import  UserCreationForm
 from django.contrib import messages
 from django.contrib.auth import login , logout
 from django.contrib.auth.forms import AuthenticationForm
+from .forms import CustomLoginForm
 
 
 #Show course list (Course)
@@ -52,7 +53,7 @@ def register_view(request):
 #login user and instructor 
 def login_view(request):
     if request.method == 'POST':
-        form = AuthenticationForm(request, data=request.POST)
+        form = CustomLoginForm(request, data=request.POST)
         if form.is_valid():
             user = form.get_user()
             login(request, user)
@@ -60,7 +61,7 @@ def login_view(request):
         else:
             messages.error(request, 'The username or password is incorrect.')
     else:
-        form = AuthenticationForm()        
+        form = CustomLoginForm()        
     return render(request, 'login.html', {'form': form})         
 
 @login_required
