@@ -4,7 +4,6 @@ from .models import Course, Reservation
 from .forms import  UserCreationForm
 from django.contrib import messages
 from django.contrib.auth import login , logout
-from django.contrib.auth.forms import AuthenticationForm
 from .forms import CustomLoginForm
 
 
